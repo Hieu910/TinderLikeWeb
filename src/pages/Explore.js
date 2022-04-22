@@ -38,16 +38,16 @@ const Explore = () => {
     if (bounds) {
       setIsLoading(true);
         
-      // getWeatherData(coords.lat, coords.lng)
-      //   .then((data) => setWeatherData(data));
+      getWeatherData(coords.lat, coords.lng)
+        .then((data) => setWeatherData(data));
 
-      // getPlacesData(type, bounds.sw, bounds.ne)
-      //   .then((data) => {
-      //     setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
-      //     setFilteredPlaces([]);
-      //     setRating('');
-      //     setIsLoading(false);
-      //   });
+      getPlacesData(type, bounds.sw, bounds.ne)
+        .then((data) => {
+          setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
+          setFilteredPlaces([]);
+          setRating('');
+          setIsLoading(false);
+        });
     }
   }, [bounds, type]);
 
