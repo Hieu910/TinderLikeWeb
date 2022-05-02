@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { UserContext } from "../context/UserContext"
+import { useContext, useEffect, useState } from "react";
 import { useCookies, Cookies } from "react-cookie";
 
 import Select from "react-select";
@@ -6,7 +7,7 @@ import makeAnimated from "react-select/animated";
 import passions from "../data/passions";
 import {  updateUser } from '../api/chatengineAPI';
 
-const Userinfo = ({setUserData,userData,user,setUser}) => {
+const Userinfo = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const userId = cookies.UserId;
   const [avatar, setAvatar] = useState("");
@@ -14,6 +15,9 @@ const Userinfo = ({setUserData,userData,user,setUser}) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [customJson, setCustomJson] = useState("");
+
+  const {user, userData,setUser,setUserData} = useContext(UserContext)
+
 
   useEffect(()=>{
       setCustomJson(userData)
@@ -228,7 +232,7 @@ const Userinfo = ({setUserData,userData,user,setUser}) => {
           </section>
 
           <section>
-            <label htmlFor="about">Profile</label>
+            <label htmlFor="about">Avatar</label>
             <input
               type="file"
               name="url"

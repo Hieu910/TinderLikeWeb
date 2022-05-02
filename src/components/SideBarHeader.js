@@ -6,11 +6,15 @@ import {IoSettingsSharp} from "react-icons/io5"
 import {MdTravelExplore} from "react-icons/md"
 import {IoSearch} from "react-icons/io5"
 import SearchSettings from './SearchSettings';
-import { useState } from 'react';
-
-const SideBarHeader = ({user,setSearchFilter,setShowInfo}) => {
+import { UserContext } from "../context/UserContext"
+import { HeaderContext } from '../context/HeaderContext';
+import { useContext, useState } from "react";
+const SideBarHeader = () => {
     const [cookies,setCookie,removeCookie] = useCookies(['user'])
     const [showSearch, setShowSearch] = useState(false)
+
+    const{user} = useContext(UserContext)
+    const {setShowInfo} = useContext(HeaderContext)
 
     let navigate = useNavigate()
     const logout = ()=>{
@@ -25,7 +29,7 @@ const SideBarHeader = ({user,setSearchFilter,setShowInfo}) => {
         setShowInfo((prevValue)=>!prevValue)
     }
     const toggleSearch = ()=>{
-        showSearch ? setShowSearch(false) :setShowSearch(true)
+        setShowSearch((prevValue)=> !prevValue)
     }
     const goToExplore = ()=>{
         navigate ('/explore')
@@ -41,7 +45,7 @@ const SideBarHeader = ({user,setSearchFilter,setShowInfo}) => {
            <div className="icon-container" onClick={goToExplore}><MdTravelExplore className='explore-icon'/></div>
            <div className="icon-container" onClick={toggleInfo}><IoSettingsSharp className='setting-icon'/></div>
            <div className="icon-container" onClick={toggleSearch}><IoSearch className='search-icon'/></div>
-           {showSearch && <SearchSettings setSearchFilter={setSearchFilter}/>}
+           {showSearch && <SearchSettings/>}
             <GoogleLogout 
                 className="log-out-icon"
                 clientId="734058757713-h2l0k7cpp493k6e5tvtlnlr2vi77fdql.apps.googleusercontent.com"

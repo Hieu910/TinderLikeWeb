@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import passions from "../data/passions";
+import  validateEmail  from '../api/validateEmailAPI'
 import {  updateUser } from '../api/chatengineAPI';
-
+import { CircularProgress } from '@material-ui/core';
 const Onboarding = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const authToken = cookies.AuthToken;
@@ -15,8 +16,7 @@ const Onboarding = () => {
   const [preview, setPreview] = useState("");
   const [email, setEmail] = useState("");
   const [allowLocation, setAllowtLocation] = useState(false);
- 
-
+  const [loading,setLoading] =useState (false)
   const [name, setName] = useState({
     first_name: "",
     last_name: "",
@@ -110,13 +110,6 @@ const Onboarding = () => {
       };
     });
   };
-  const validateEmail = (email) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
 
   const handleEmail = (e) => {
     let value = e.target.value;
@@ -136,40 +129,53 @@ const Onboarding = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateEmail(email)){
-      alert("You have entered an invalid email address!");
+    setLoading(true)
+    validateEmail(email)
+    .then((res)=>{
+      if(res.state !== "deliverable"){
+        setLoading(false)
+        alert("You have entered an invalid email address!")
         return
-    }
-    let formdata = new FormData();
-    formdata.append("custom_json", JSON.stringify(customJson));
-    formdata.append("avatar", avatar, avatar.name);
-    formdata.append("first_name", name.first_name);
-    formdata.append("last_name", name.last_name);
-    formdata.append("email", email);
-    try {
-      updateUser(userId,formdata)
-        .then((res) => {
-          navigate("/dashboard");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+      }
+      let formdata = new FormData();
+      formdata.append("custom_json", JSON.stringify(customJson))
+      formdata.append("avatar", avatar, avatar.name);
+      formdata.append("first_name", name.first_name);
+      formdata.append("last_name", name.last_name);
+      formdata.append("email", email);
+      try {
+        updateUser(userId,formdata)
+          .then((res) => {
+            navigate("/dashboard")
+            window.location.reload()
+          })
+          .catch((err) => {
+            setLoading(false)
+            console.log(err)
+          });
+      } catch (err) {
+        setLoading(false)
+        console.log(err)
+      }
+    })
+    .catch((err)=>{
+      setLoading(false)
+      console.log(err)
+    })
+
   };
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/");
-      window.location.reload();
+      navigate("/")
+      window.location.reload()
     }
     handleLocation()
   }, []);
 
   return (
     <div>
+     {loading && <div className="loading"><CircularProgress color='secondary' size="5rem" /></div>}
       <Nav minimal={true}/>
       <div className="onboarding">
         <h2>CREATE ACCOUNT</h2>
@@ -191,7 +197,7 @@ const Onboarding = () => {
               type="text"
               name="first_name"
               required
-              value={name.first_name}
+              value={name?.first_name}
               placeholder="First Name"
               onChange={handleName}
             />
@@ -200,7 +206,7 @@ const Onboarding = () => {
               id="last_name"
               type="text"
               name="last_name"
-              value={name.last_name}
+              value={name?.last_name}
               placeholder="Last Name"
               onChange={handleName}
             />
@@ -211,7 +217,7 @@ const Onboarding = () => {
                 type="number"
                 name="dob_day"
                 min="1" max="31"
-                value={customJson.dob_day}
+                value={customJson?.dob_day}
                 required
                 placeholder="DD"
                 onChange={handleChange}
@@ -222,7 +228,7 @@ const Onboarding = () => {
                 min="1" max="12"
                 name="dob_month"
                 required
-                value={customJson.dob_month}
+                value={customJson?.dob_month}
                 placeholder="MM"
                 onChange={handleChange}
               />
@@ -231,7 +237,7 @@ const Onboarding = () => {
                 type="number"
                 min="1" max="2022"
                 name="dob_year"
-                value={customJson.dob_year}
+                value={customJson?.dob_year}
                 required
                 placeholder="YYYY"
                 onChange={handleChange}
@@ -245,7 +251,7 @@ const Onboarding = () => {
                 type="radio"
                 name="gender_identity"
                 onChange={handleChange}
-                checked={customJson.gender_identity === "man"}
+                checked={customJson?.gender_identity === "man"}
                 value="man"
               />
               <label htmlFor="man">Man</label>
@@ -254,7 +260,7 @@ const Onboarding = () => {
                 type="radio"
                 name="gender_identity"
                 onChange={handleChange}
-                checked={customJson.gender_identity === "woman"}
+                checked={customJson?.gender_identity === "woman"}
                 value="woman"
               />
               <label htmlFor="woman">Woman</label>
@@ -266,7 +272,7 @@ const Onboarding = () => {
               id="show-gender"
               type="checkbox"
               name="show_gender"
-              checked={customJson.show_gender}
+              checked={customJson?.show_gender}
               onChange={handleChange}
             />
 
@@ -278,7 +284,7 @@ const Onboarding = () => {
                 name="gender_interest"
                 onChange={handleChange}
                 value="man"
-                checked={customJson.gender_interest === "man"}
+                checked={customJson?.gender_interest === "man"}
               />
               <label htmlFor="man-interest">Man</label>
               <input
@@ -287,7 +293,7 @@ const Onboarding = () => {
                 name="gender_interest"
                 onChange={handleChange}
                 value="woman"
-                checked={customJson.gender_interest === "woman"}
+                checked={customJson?.gender_interest === "woman"}
               />
               <label htmlFor="woman-interest">Woman</label>
               <input
@@ -296,7 +302,7 @@ const Onboarding = () => {
                 name="gender_interest"
                 value="everyone"
                 onChange={handleChange}
-                checked={customJson.gender_interest === "everyone"}
+                checked={customJson?.gender_interest === "everyone"}
               />
               <label htmlFor="everyone-interest">Everyone</label>
             </div>
@@ -327,14 +333,14 @@ const Onboarding = () => {
               id="about"
               type="text"
               name="about"
-              value={customJson.about}
+              value={customJson?.about}
               placeholder="I like watching Gumball.."
               onChange={handleChange}
             />
             <label htmlFor="about">Passions</label>
             <Select
               placeholder="select 5"
-              value={passions.filter(obj => customJson.passions.includes(obj.value))}
+              value={passions?.filter(obj => customJson?.passions?.includes(obj.value))}
               closeMenuOnSelect={false}
               onChange={handleSelect}
               components={makeAnimated()}
@@ -346,7 +352,7 @@ const Onboarding = () => {
                   primary: "black",
                 },
               })}
-              options={customJson.passions.length <5 ? passions: []}
+              options={customJson?.passions?.length <5 ? passions: []}
             />
             <button disabled={!allowLocation} type="submit">Submit</button>
           </section>

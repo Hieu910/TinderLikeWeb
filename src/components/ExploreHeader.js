@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autocomplete } from '@react-google-maps/api';
-import { AppBar, Toolbar, Typography, InputBase, Box } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, InputBase, Box, Hidden } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import logo from "../images/white-logo.png"
 
@@ -20,9 +20,11 @@ const ExploreHeader = ({ onPlaceChanged, onLoad }) => {
                 <img alt="logo" className="logo" src={logo} />
             </div>
         <Box display="flex">
+          <Hidden only="xs">
           <Typography variant="h6" className="header-title">
             Explore new places
           </Typography>
+          </Hidden>
           <Autocomplete className='header-search-container' onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
             <div className="header-search">
               <div className="header-search-icon">

@@ -3,7 +3,6 @@ import { useState } from "react"
 import AuthModal from "../components/AuthModal"
 import { useCookies } from "react-cookie"
 import { useNavigate } from 'react-router-dom'
-
 import {  getUserById } from '../api/chatengineAPI';
 
 const Home = () => {

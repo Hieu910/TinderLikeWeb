@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../context/UserContext"
+import { ChatContext } from "../context/ChatContext"
 import { useCookies } from "react-cookie";
 import { IoLocationOutline } from "react-icons/io5";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoMailOutline } from "react-icons/io5";
 import {  updateUser } from '../api/chatengineAPI';
-const ChatSettings = ({chat,creds,userData,setMatchedUserIds,clickedUser,setClickedUser,setUserData,setShowChat})=>{
+const ChatSettings = ({chat,creds,distance})=>{
 
     const [cookies, setCookie, removeCookie] = useCookies(["user"])
     const userId  = cookies.UserId
+
+    const { userData,setUserData, clickedUser, setClickedUser,setMatchedUserIds} = useContext(UserContext)
+    const {setShowChat } = useContext(ChatContext)
+
     const [recipientInfo,setRecipientInfo] = useState(null)
     const [recipientAvatar,setRecipientAvatar]= useState("") 
     const [recipientFirstName,setRecipientFirstName]= useState("") 
@@ -39,17 +45,6 @@ const ChatSettings = ({chat,creds,userData,setMatchedUserIds,clickedUser,setClic
        }
     },[recipientInfo])
 
-
-    //khoang cach 2 diem tren ban do
-    const distance = (lat1, lon1, lat2, lon2)=>{
-        var p = 0.017453292519943295;
-        var c = Math.cos;
-        var a = 0.5 - c((lat2 - lat1) * p)/2 + 
-                c(lat1 * p) * c(lat2 * p) * 
-                (1 - c((lon2 - lon1) * p))/2;
-      
-        return (12742 * Math.asin(Math.sqrt(a))).toFixed(1); 
-      }
 
     const handleDeleteMatch = ()=>{
         const matchIndex = userData ? userData.matches.indexOf(clickedUser.id) :null

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import Select from "react-select";
 import Switch from "react-switch";
 import passions from "../data/passions";
-const SearchSettings = ({setSearchFilter})=>{
+import { HeaderContext } from '../context/HeaderContext';
+
+const SearchSettings = ()=>{
     
     const [distanceFilter,setDistantFilter] = useState(false)
     const [distance,setDistance] = useState("")
@@ -14,6 +16,8 @@ const SearchSettings = ({setSearchFilter})=>{
 
     const [passionFilter,setPassionFilter] = useState(false)
     const [passion,setPassion] = useState("")
+    const { setSearchFilter } = useContext(HeaderContext)
+   
 
     const handleDistance = ()=>{
         setDistantFilter((prevValue)=>{
@@ -51,8 +55,8 @@ const SearchSettings = ({setSearchFilter})=>{
         })
     }
     return (
-            <div className="search-container p-3">
-               <div className="search-option mb-3">
+            <div className="search-container">
+               <div className="search-option">
                     <label htmlFor="age-from">Age from </label>
                     <input disabled={!ageFilter} id="age-from" min="18" max="100" value={age.agefrom} onChange={changeAge} className="age-bar-search" name="agefrom" type="number"></input>
                     <label htmlFor="age-to"> to </label>
@@ -61,7 +65,7 @@ const SearchSettings = ({setSearchFilter})=>{
                         <Switch onChange={handleAge} checked={ageFilter}/>
                     </label>
                </div>
-               <div className="search-option mb-3">
+               <div className="search-option">
                     <label htmlFor="distant">Distance</label>
                    <input disabled={!distanceFilter} id="distant" value={distance} onChange={(e)=>{setDistance(e.target.value)}} className="distance-search" name="distance" type="number"></input>
                    <span>KM</span>
@@ -69,10 +73,10 @@ const SearchSettings = ({setSearchFilter})=>{
                         <Switch onChange={handleDistance} checked={distanceFilter}/>
                     </label>
                </div>
-               <div className="search-option mb-3">
+               <div className="search-option">
                <span>Passion</span>
                     <Select 
-                        className=""
+                        className="passion-search"
                         onChange={(e)=>{handleSelect(e)}}
                         isClearable
                         isSearchable

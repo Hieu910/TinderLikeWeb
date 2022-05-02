@@ -1,5 +1,7 @@
-
-import { useEffect, useState } from "react";
+import { HeaderContext } from "../context/HeaderContext"
+import { UserContext } from "../context/UserContext"
+import { ChatContext } from "../context/ChatContext"
+import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import SideBarContainer from "../components/SideBarContainer"
 import { ChatEngine} from 'react-chat-engine'
@@ -8,31 +10,25 @@ import SwipeMenu from "../components/SwipeMenu";
 import ChatHeader from "../components/ChatHeader";
 import ChatSettings from "../components/ChatSettings";
 import Userinfo from "../components/UserInfo";
-import {  getAllUsers,getUserById, updateUser } from '../api/chatengineAPI';
-
+import { getAllUsers, getUserById } from '../api/chatengineAPI';
+import { ChatEngineContext } from "react-chat-engine"
 const Dashboard = () => {
+  const { chats, activeChat ,setActiveChat } = useContext(ChatEngineContext)
+  console.log(activeChat)
+  
+    const { user,userData,setUserData,
+          setUser,matchedUserIds,
+          notMatchedUserIds,
+          setMatchedUserIds,
+          setNotMatchedUserIds
+        } = useContext(UserContext)
+    const { searchFilter, showInfo } = useContext(HeaderContext)
+    const {showChat,showGroupChat,isFirstRender} = useContext(ChatContext)
     
-    const [user, setUser] = useState({
-      first_name:"",
-      last_name:"",
-      avatar:""
-    })
-    const [userData, setUserData] = useState("")
-    const [searchFilter,setSearchFilter] = useState({
-      distanceOption:"",
-      ageOption:"",
-      passionOption:""
-    }) 
     const [genderedUsers, setGenderedUsers] = useState([])
-    const [cookies, setCookie, removeCookie] = useCookies(["user"])
+    const [cookies, setCookie, removeCookie] = useCookies("user")
     const userId  = Number(cookies.UserId)
-    const [matchedUserIds, setMatchedUserIds] = useState([])
-    const [notMatchedUserIds, setNotMatchedUserIds] = useState([])
-    const [showInfo, setShowInfo] = useState(false)
-    const [showChat, setShowChat] = useState(false)
-    const [showGroupChat,setShowGroupChat] =useState(false)
-    const [showGroupsList,setShowGroupsList] =useState(false)
-    const [clickedUser,setClickedUser] = useState("")
+ 
     const navigate = useNavigate()
   
     
@@ -87,47 +83,10 @@ const Dashboard = () => {
       if(user){
         getGenderedUsers()
       }
+
     },[user,userData])
 
-
-
-    const updatedMatches = (matchedUserId)=>{
-      userData.matches.push(matchedUserId)
-      let formdata = new FormData()
-      formdata.append("custom_json",JSON.stringify(userData));
-        try{
-          updateUser(userId,formdata)
-          .then((res)=>{
-              setMatchedUserIds(JSON.parse(res.data.custom_json).matches)
-              setUserData(JSON.parse(res.data.custom_json))
-          })
-          .catch((err)=>{
-              console.log(err)
-          })
-         
-        } catch (err){
-          console.log(err)
-        }
-    }
-    
-    const updatedNotMatches = (notMatchedUserId)=>{
-      userData.not_matches.push(notMatchedUserId)
-      let formdata = new FormData()
-      formdata.append("custom_json",JSON.stringify(userData));
-        try{
-          updateUser(userId,formdata)
-          .then((res)=>{
-            setNotMatchedUserIds(JSON.parse(res.data.custom_json).not_matches)
-            setUserData(JSON.parse(res.data.custom_json))
-          })
-          .catch((err)=>{
-              console.log(err)
-          })
-        } catch (err){
-          console.log(err)
-        }
-    }
-
+   
       //khoang cach 2 diem tren ban do
       const distance = (lat1, lon1, lat2, lon2)=>{
         var p = 0.017453292519943295;
@@ -140,29 +99,29 @@ const Dashboard = () => {
       }
 
     const filterAgeUsers = function(){
-        if(searchFilter.ageOption){
+        if(searchFilter?.ageOption){
            return genderedUsers?.filter(function(genderedUser){
                 const genderedUserAge = (new Date().getFullYear() - Number(JSON.parse(genderedUser.custom_json).dob_year))
-                return genderedUserAge>= Number(searchFilter.ageOption.agefrom) && genderedUserAge<= Number(searchFilter.ageOption.ageto)
+                return genderedUserAge>= Number(searchFilter?.ageOption.agefrom) && genderedUserAge<= Number(searchFilter.ageOption.ageto)
           })
         }
         return genderedUsers
     }
     const filterDistanceUsers = function(filteredAgeUsers){
-      if(searchFilter.distanceOption){
+      if(searchFilter?.distanceOption){
          return filteredAgeUsers?.filter(function(filteredAgeUser){
           const location = JSON.parse(filteredAgeUser.custom_json).location
           const distant = distance(location.latitude,location.longitude,userData.location.latitude,userData.location.longitude)
-              return distant <= Number(searchFilter.distanceOption)
+              return distant <= Number(searchFilter?.distanceOption)
         })
       }
       return filteredAgeUsers
     }
     const filterPassionUsers = function(filteredDistanceUsers){
-      if(searchFilter.passionOption){
+      if(searchFilter?.passionOption){
         return filteredDistanceUsers?.filter(function(filteredDistanceUser){
               const passions = JSON.parse(filteredDistanceUser.custom_json).passions
-            return passions.includes(searchFilter.passionOption)
+            return passions.includes(searchFilter?.passionOption)
         })
       }
       return filteredDistanceUsers
@@ -180,66 +139,55 @@ const Dashboard = () => {
     <div>
     {user &&
     <div className="dashboard">
-      <SideBarContainer 
-        user={user} 
-        matchedIds={matchedUserIds} 
-        showChat={showChat} 
-        setShowChat={setShowChat}
-        setShowGroupChat = {setShowGroupChat}
-        showGroupsList={showGroupsList}
-        setShowGroupsList = {setShowGroupsList}
-        setShowInfo={setShowInfo}
-        setClickedUser={setClickedUser}
-        setSearchFilter={setSearchFilter}
-      /> 
+      <SideBarContainer /> 
 
       { !showChat &&
           <SwipeMenu 
             filteredMatchedGenderedUsers={filteredMatchedGenderedUsers} 
-            updatedMatches = {updatedMatches}
             distance={distance}
-            userData={userData}
-            updatedNotMatches= {updatedNotMatches}
           />}
         
         { showInfo &&
           <div className="user-info" style={{ fontFamily: "Readex Pro"}}>
-              <Userinfo setUserData={setUserData} userData={userData} user={user} setUser={setUser}/>
+              <Userinfo />
           </div>
         }
-        
-        
+        {isFirstRender && 
+
         <div className={showChat ? "chatengine show-chat":"chatengine"} style={{ fontFamily: "Readex Pro"}}>
-        <ChatEngine 
+        <ChatEngine                
+                              
                   offset={+7}
                   height="100vh"
                   projectID="9634dd60-e53b-4d63-a793-711552089ad4"
                   userName={cookies.UserName}
                   userSecret={cookies.UserSecret}
                   renderNewChatForm={(creds) => {}}
-                  renderChatHeader={(chat) => chat ? <ChatHeader clickedUser={clickedUser} setShowChat={setShowChat} chat={chat}/> :null}
+                  renderChatHeader={(chat) => chat ? <ChatHeader chat={chat}/> :null}
                   renderChatSettingsTop={(creds, chat) => chat ? <ChatSettings 
                                                             creds={creds}
-                                                            setShowChat={setShowChat}
                                                             chat={chat}
-                                                            userData={userData} 
-                                                            setUserData={setUserData}
-                                                            setMatchedUserIds={setMatchedUserIds} 
-                                                            clickedUser={clickedUser} 
-                                                            setClickedUser={setClickedUser}  
+                                                            distance= {distance}
                                                           /> :null}
+                  onNewMessage={() => new Audio('https://chat-engine-assets.s3.amazonaws.com/click.mp3').play()}   
               />
        </div>
+        }
+        
+        
 
        { showGroupChat ?
        <div className={showGroupChat ? "chatengine show-groups":"chatengine"} style={{ fontFamily: "Readex Pro"}}>
         <ChatEngine 
+              
                   offset={+7}
                   height="100vh"
                   projectID="9634dd60-e53b-4d63-a793-711552089ad4"
                   userName={cookies.UserName}
                   userSecret={cookies.UserSecret}
-                  renderChatHeader={(creds) => {}}
+                  renderChatHeader={(chat) => chat ? <ChatHeader chat={chat}/> :null}
+                  onNewMessage={() => new Audio('https://chat-engine-assets.s3.amazonaws.com/click.mp3').play()}
+                 
               />
        </div> : null
        }

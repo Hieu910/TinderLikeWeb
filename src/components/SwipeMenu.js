@@ -3,8 +3,19 @@ import { BsGenderMale } from "react-icons/bs"
 import { BsGenderFemale } from "react-icons/bs"
 import {IoIosClose} from "react-icons/io"
 import { IoMdHeart } from "react-icons/io"
-const SwipeMenu = ({filteredMatchedGenderedUsers,updatedMatches,distance,userData,updatedNotMatches})=>{
+import { UserContext } from "../context/UserContext"
+import { useContext } from "react";
+import { updateUser } from '../api/chatengineAPI';
+import { useCookies } from "react-cookie";
+const SwipeMenu = ({filteredMatchedGenderedUsers,distance})=>{
+  const [cookies, setCookie, removeCookie] = useCookies("user")
+  const userId  = Number(cookies.UserId)
 
+  const { userData,matchedUserIds,
+    notMatchedUserIds,
+    setMatchedUserIds,
+    setNotMatchedUserIds
+  } = useContext(UserContext)
     const showGender = (genderedUserInfo)=>{
         if(genderedUserInfo.show_gender){
           return genderedUserInfo.gender_identity === "man" ? <BsGenderMale className="gender-icon-male"/> : <BsGenderFemale className="gender-icon-female"/> 
@@ -13,6 +24,42 @@ const SwipeMenu = ({filteredMatchedGenderedUsers,updatedMatches,distance,userDat
           return null
         }
     }
+    const updatedMatches = (matchedUserId)=>{
+
+      setMatchedUserIds((prevValue)=>[...prevValue,matchedUserId])
+      const newMatches = matchedUserIds
+      newMatches.push(matchedUserId)
+      const newData = {...userData,matches: newMatches}
+      let formdata = new FormData()
+      formdata.append("custom_json",JSON.stringify(newData));
+        try{
+          updateUser(userId,formdata)
+          .catch((err)=>{
+              console.log(err)
+          })
+         
+        } catch (err){
+          console.log(err)
+        }
+    }
+    const updatedNotMatches = (notMatchedUserId)=>{
+      setNotMatchedUserIds((prevValue)=>[...prevValue,notMatchedUserId])
+      const newNotMatches = notMatchedUserIds
+      newNotMatches.push(notMatchedUserId)
+      const newData = {...userData,not_matches: newNotMatches}
+      let formdata = new FormData()
+      formdata.append("custom_json",JSON.stringify(newData));
+        try{
+          updateUser(userId,formdata)
+          .catch((err)=>{
+              console.log(err)
+          })
+        } catch (err){
+          console.log(err)
+        }
+    }
+    
+
     const swiped = (direction, swipedUser) => {
     
       if(direction === "right")

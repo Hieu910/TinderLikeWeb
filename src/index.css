@@ -69,8 +69,7 @@ p{
 /*--Navbar --*/
 
 nav {
-    width: 100%;
-    padding: 0px 3%;
+    width: 100vw;
     display: flex;
     justify-content: space-between;
 }
@@ -185,6 +184,9 @@ nav .nav-button:disabled{
 .auth-modal .close-icon{
     width: 20px;
     height: 20px; 
+    position: absolute;
+    top:5px;
+    left: 5px;
     transition: all 1s;
 }
 .auth-modal .close-icon:hover{
@@ -194,7 +196,27 @@ nav .nav-button:disabled{
 .auth-modal form {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
 }
+.auth-modal form>button{
+    width: 300px;
+}
+.auth-modal .form-control{
+    width: 350px;
+    margin-bottom: 15px;
+}
+.auth-modal .form-input{
+    flex-grow: 1; 
+}
+
+.password-adorment{
+    width: auto;
+}
+.toggle-visibility-icon{
+    padding: 0;
+}
+
 .auth-modal .gg-login-btn{
     color: rgb(121,119,119) !important;
     font-size: 15px !important;
@@ -210,15 +232,15 @@ nav .nav-button:disabled{
 .auth-modal .facebook-login-container{
     color: rgb(121,119,119);
     font-size: 15px;
-    width: 300px ;
-    height: 50px;
+    max-width: 256px ;
+    height: 46px;
     display: flex;
     align-items: center;
     text-transform: uppercase ;
     padding: 0px 20px;
     border-radius: 30px;
     border: solid 2px rgb(121,119,119);
-    margin: 6px auto;
+    margin: 6px auto 10px;
 }
 .auth-modal .facebook-login-icon{
     font-size: 25px;
@@ -339,6 +361,7 @@ nav .nav-button:disabled{
 }
 .onboarding form button[type="submit"]{
     width: 50%;
+    cursor: pointer;
     align-self: center;
 }
 .onboarding form button[type="submit"]:hover{
@@ -366,11 +389,12 @@ nav .nav-button:disabled{
     justify-content: space-around;
 }
 .onboarding.update-info form section {
-    width: 50%;
+    width: 40%;
 }
 
 .onboarding.update-info form .options{
-    width: 80%;
+    width: 70%;
+    margin-bottom: 20px;
  }
 
 /*--User info--*/
@@ -395,10 +419,11 @@ nav .nav-button:disabled{
 /*--Dashboard--*/
 .dashboard{
     display: flex;
+    width: 100%;
     justify-content: space-between;
 }
 .swipe-container{
-    width: 75%;
+    width: 100vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -407,8 +432,8 @@ nav .nav-button:disabled{
 }
 .swipe-dir{
     height: 100vh;
-    display: flex;
     width: 150px;
+    display: flex;
     align-items: center;
     margin: 0px 20px;
 }
@@ -568,7 +593,7 @@ nav .nav-button:disabled{
     margin: 0px !important;
     background-color: transparent !important;
     position: relative;
-    top:-3px;
+    top:3px;
     color: #fff !important; 
     box-shadow: none !important;
 }
@@ -624,7 +649,8 @@ nav .nav-button:disabled{
 .search-container{
     position: absolute;
     top:100px;
-    width: 100%;
+    width: 94%;
+    padding: 10px;
     border: 1px solid #505965;
     background-color: #ccc;
     z-index: 2;
@@ -636,13 +662,17 @@ nav .nav-button:disabled{
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 10px;
 }
 .age-bar-search{
     max-width: 20%;
 }
-.distance-search{
-    max-width: 30%;
+.distance-search,
+.passion-search
+{
+    max-width: 40%;
 }
+
 .save-option{
     justify-content: center;
 }
@@ -663,7 +693,7 @@ nav .nav-button:disabled{
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: calc(100vh - 178px);
+    height: calc(100vh - 195px);
     width: 100%;
     overflow-y: scroll;
     padding: 10px 20px;
@@ -673,7 +703,7 @@ nav .nav-button:disabled{
     display: flex;
     justify-content: start;
     align-items: center;
-    
+    margin-bottom: 15px;
 }
 .match-card h3{
     margin: 0px 5px;
@@ -688,6 +718,12 @@ nav .nav-button:disabled{
     width: 20px;
     top: 35px;
     left: 45px;
+}
+.new-message-icon{
+    position: absolute;
+    width: 30px;
+    
+    right: 50px;
 }
 .skeleton {
     animation: skeleton-loading 1s linear infinite alternate
@@ -736,9 +772,7 @@ nav .nav-button:disabled{
     z-index: 2;
     transition: all 0.3s linear;
 }
-.show-chat{
-    transform: translateX(34%);
-}
+.show-chat,
 .show-groups{
     transform: translateX(34%);
 }
@@ -767,7 +801,7 @@ nav .nav-button:disabled{
     background-color: #ff4458 !important;
 }
 /* chat header */
-.show-chat .chat-header{
+.chat-header{
     margin-left: 0px;
     margin-right: 0px;
     display: flex;
@@ -783,17 +817,22 @@ nav .nav-button:disabled{
     background-color: rgba(255, 255, 255, 0.92);
     z-index: 1;
 }
-.show-chat .chat-header .return-icon{
+.chat-header .return-icon{
     cursor: pointer;
     font-size: 30px;
     width: 30px;
     height: 30px;
     display: block;
 }
-.show-chat .chat-header-avatar{
+.chat-header .chat-avatar{
     margin:0px 30px;
 }
-
+.chat-header .chat-title{
+    margin: 0 20px;
+}
+.chat-header .chat-info{
+    margin: 0 20px;
+}
 .show-chat .ce-quill-container{
     width: 100%;
 }
@@ -916,33 +955,34 @@ nav .nav-button:disabled{
 }
 .header-search-container{
     margin-left: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .header-search{
     position: relative;
     border-radius: 5px;
     margin-right: 16px;
+    display: flex;
+    align-items: center;
     color: #ccc;
     width: 100%;
     background-color:rgba(255, 255, 255, 0.15);
 }
 .header-search:hover{
     background-color:rgba(255, 255, 255, 0.25);
-
 }
 .header-search-icon{
-    padding: 0px 16px;
     height: 100%;
-    position: absolute;
+    width: 20%;
     pointer-events: none;
     display: flex;
    align-items: center;
    justify-content: center;
 }
 .header-search-input{
-    padding: 0px 10px;
-    width: 20ch;
+    width: 80%;
     margin-right: 16px;
-    margin-left: 24px;
 }
 .header-search-input input{
     color: #ccc;
@@ -958,10 +998,14 @@ nav .nav-button:disabled{
     justify-content: center;
     align-items: center;
 }
-.list-container .form-control{
+
+.list-container .form-control {
     margin: 8px 10px 30px 0px;
-    max-width: 120px;    
+    min-width: 25%;    
 }
+/* .list-container .form-select{
+    width: 100%;
+} */
 .list-places{
     height: 75vh;
     overflow: auto;

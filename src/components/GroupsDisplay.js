@@ -1,21 +1,23 @@
 
 import React, {useEffect, useState, useContext} from 'react'
 import { ChatEngineContext } from "react-chat-engine"
+import { ChatContext } from "../context/ChatContext"
 import { useCookies } from "react-cookie"
 import {  getAllChats,createGroupChat } from '../api/chatengineAPI';
 
-const GroupsDisplay = ({setShowGroupChat,setShowChat}) => {
+const GroupsDisplay = () => {
 
     const [cookies,setCookie,removeCookie] = useCookies(null)
-    const userId = Number(cookies.UserId)
     const userName = cookies.UserName
     const userSecret = cookies.UserSecret
     const [groups, setGroups] = useState([])
     const [groupName, setGroupName] = useState("")
     const { setActiveChat } = useContext(ChatEngineContext)
+    const { setShowChat, setShowGroupChat} = useContext(ChatContext)
+
 
     const getGroups = ()=>{
-        
+    
         getAllChats(userName,userSecret)
         .then((res)=>{
             const groupsChat = res.data.filter((chat)=>{
@@ -27,6 +29,7 @@ const GroupsDisplay = ({setShowGroupChat,setShowChat}) => {
       const createGroup = ()=>{
         if(!groupName){
             alert("enter group name")
+            return
         }
         setGroupName("")
         let formdata = new FormData()
@@ -39,9 +42,8 @@ const GroupsDisplay = ({setShowGroupChat,setShowChat}) => {
         })
       }
       const handleClick = (id)=>{
-            setActiveChat(id)
-            setShowChat(false)
-            setShowGroupChat(true)
+          setShowGroupChat(true)
+          setActiveChat(id)
       }
       useEffect(()=>{
         getGroups()

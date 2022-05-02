@@ -1,4 +1,4 @@
-import { FaTimes } from "react-icons/fa";
+
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from "react-cookie"
@@ -6,7 +6,18 @@ import { GoogleLogin } from "react-google-login"
 import FacebookLogin from 'react-facebook-login';
 import { FaFacebook } from "react-icons/fa"
 import { CircularProgress } from '@material-ui/core';
-
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { FaTimes } from "react-icons/fa";
+import { MdPassword } from "react-icons/md";
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import {  getUserDetail, getOrCreateUser,createUser,getUserSession } from '../api/chatengineAPI';
 
 const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
@@ -17,6 +28,8 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
     const [cookies , setCookie, removeCookie ] =useCookies(null)
     const [isClicked ,setIsClicked] = useState(false)
     const [loading,setLoading] =useState (false)
+    const [showPassword,setShowPassword] =useState (false)
+    const [showConfirmPassword,setShowConfirmPassword] =useState (false)
     let navigate = useNavigate()
     const handleClick = () => {
         setShowModal(false)
@@ -97,7 +110,18 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
             })
         })        
     };
-
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+      };
+    const handleClickShowPassword = () => {
+        setShowPassword((prevValue)=>!prevValue);
+      };
+    const handleMouseDownConfirmPassword = (event) => {
+        event.preventDefault();
+      };
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword((prevValue)=>!prevValue);
+      };
 
     const handleSubmit =(e) =>{
         e.preventDefault()
@@ -167,6 +191,7 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
             console.log(err)
         }
     }
+   
     return (
         <div className="modal" onClick={handleClick}>
         <div className="auth-modal" onClick={(e)=>{e.stopPropagation()}}>
@@ -174,44 +199,77 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
             <h2>{isSignUp ? "Create Account" : "Login"}</h2>
             <p>By clicking {isSignUp ? "Create Account" : "Login"} you agree to our terms of service and privacy statement</p>
             <form onSubmit={handleSubmit} autoComplete="off">
-            <div className="form-floating mb-3">
-                <input 
-                    type="text" 
-                    className="form-control"
-                    id="username" 
-                    name="username" 
-                    placeholder="User name" required 
-                    onChange={(e)=>{setUserName(e.target.value)}} 
-                    autoComplete="off">
-                </input>
-                <label htmlFor="username">User Name</label>
-            </div>
-               
-               <div className="form-floating mb-3"> 
-               <input 
-                    type="password" 
-                    id="password" 
-                    className="form-control"
-                    name="password" 
-                    placeholder="password" required 
-                    onChange={(e)=>{setPassword(e.target.value)}}  
-                    autoComplete="off">
-                </input>
-                <label htmlFor="password">Password</label>
-               </div>
+          
+                    <Grid container spacing={1} className="form-control" alignItems="flex-end" justifyContent="center">
+                    <Grid item>
+                        <AccountCircle />
+                    </Grid>
+                    <Grid className="form-input" item>
+                        <TextField fullWidth={true} onChange={(e)=>{setUserName(e.target.value)}} className="username-input" id="username" label="User name" />
+                    </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1} className="form-control" alignItems="flex-end" justifyContent="center">
+                    <Grid item>
+                        <MdPassword style={{width:"24px",height:"24px"}}/>
+                    </Grid>
+                    <Grid className="form-input" item>
+                    <FormControl fullWidth={true} className="">
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input
+                            id="password"
+                            className="password-input"
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e)=>{setPassword(e.target.value)}}
+                            endAdornment={
+                            <InputAdornment className="password-adorment" position="end">
+                                <IconButton
+                                className="toggle-visibility-icon"
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                            }
+                        />
+                     </FormControl>
+                    </Grid>
+                    </Grid>
                 
                 {isSignUp && 
-                <div className="form-floating mb-3">
-                <input 
-                    type="password" 
-                    id="password-check" 
-                    className="form-control"
-                    name="password-check" 
-                    placeholder="confirm password" required 
-                    onChange={(e)=>{setConfirmPassword(e.target.value)}}>
-                </input>
-                <label htmlFor="password-check">Confirm Password</label>
-                </div>}
+                    <Grid container spacing={1} className="form-control" alignItems="flex-end" justifyContent="center">
+                    <Grid item>
+                        <MdPassword style={{width:"24px",height:"24px"}}/>
+                    </Grid>
+                    <Grid className="form-input" item>
+                    <FormControl fullWidth={true} className="">
+                    <InputLabel htmlFor="password-check">Confirm Password</InputLabel>
+                        <Input
+                            id="password-check"
+                            className="password-input"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            value={confirmPassword}
+                            onChange={(e)=>{setConfirmPassword(e.target.value)}}
+                            endAdornment={
+                            <InputAdornment className="password-adorment" position="end">
+                                <IconButton
+                                className="toggle-visibility-icon"
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowConfirmPassword}
+                                onMouseDown={handleMouseDownConfirmPassword}
+                                >
+                                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                            }
+                        />
+                     </FormControl>
+                    </Grid>
+                    </Grid>
+                }
                 <p>{error}</p>
                 <button className="secondary-button" type="submit">{isSignUp ? "Create": "Login"}</button>
             </form>
@@ -240,7 +298,6 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
         {loading && <div className="loading"><CircularProgress color='secondary' size="5rem" /></div>}
         </div>
  
-       
     )
 }
 
