@@ -7,7 +7,7 @@ import { ChatContext } from "../context/ChatContext"
 const ChatHeader = ({chat})=>{
   
     const [recipientAvatar,setRecipientAvatar]= useState("") 
-    const { clickedUser } = useContext(UserContext)
+    const { clickedUser,setClickedUser } = useContext(UserContext)
     const { setShowChat, showChat, setShowGroupChat } = useContext(ChatContext)
     
     const chatHeaderInfo = ()=>{
@@ -18,7 +18,13 @@ const ChatHeader = ({chat})=>{
         return null
     }
     const closeChat = ()=>{
-        showChat ? setShowChat(false) : setShowGroupChat(false)
+        if(showChat){
+            setShowChat(false)
+            setClickedUser(null)
+        }  
+        else{
+            setShowGroupChat(false)
+        }
     }
     useEffect(()=>{
         if(clickedUser){
@@ -31,9 +37,9 @@ const ChatHeader = ({chat})=>{
             
             <div onClick={closeChat} className="icon-container"><IoReturnDownBackOutline className="return-icon"/></div>
             {
-                showChat && <div className="chat-avatar">
+                showChat ? <div className="chat-avatar">
                     <div className="avatar-container skeleton" style={{ backgroundImage: "url(" + recipientAvatar + ")", backgroundSize:"cover",backgroundPosition:"center", height:"60px",width:"60px"}} ></div>
-                 </div> 
+                 </div>: <div className="title-container"><p className="chat-title">{chat.title}</p></div>
             } 
             <div className="chat-info">{chatHeaderInfo()}</div>
         </div>

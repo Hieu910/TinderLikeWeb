@@ -10,6 +10,7 @@ html,body {
     margin: 0;
     padding: 0;
     text-align: center;
+   
 }
 h1,h2,h3,h4{
     margin: 0;
@@ -94,7 +95,9 @@ nav .nav-button:disabled{
 .logo-container .logo{
    width: 100%;
 }
-
+.small-logo{
+    height: 50px;
+}
 /*--Home page--*/
 .overlay{
     bottom: 0;
@@ -400,13 +403,25 @@ nav .nav-button:disabled{
 /*--User info--*/
 .user-info{
     width: 75%;
-    bottom: 0%;
-     top: 0%;
+    bottom: 0;
+    top: 0;
+    left: 0;
     position: fixed;
     z-index: 3;
     animation: slide-in .3s ease-in forwards;
 }
-
+.close-setting{
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+}
 @keyframes slide-in {
     from{
         transform: translateX(150%);
@@ -421,6 +436,7 @@ nav .nav-button:disabled{
     display: flex;
     width: 100%;
     justify-content: space-between;
+    height: 100%;
 }
 .swipe-container{
     width: 100vw;
@@ -457,6 +473,7 @@ nav .nav-button:disabled{
 .swipe {
     position: absolute;
   }
+
 .swipe.empty h3{
     margin: 50px 5px;
 }
@@ -469,6 +486,7 @@ nav .nav-button:disabled{
     background-color: #fff;
     width: 400px;
     height: 650px;
+    min-height: 500px;
     box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
     border-radius: 20px;
     background-size: cover;
@@ -517,7 +535,7 @@ nav .nav-button:disabled{
     margin-left: 10px;
 }
   .card-content{
-    width: 100%;
+   
   }
   .card-content p {
     color: #fff;
@@ -693,8 +711,8 @@ nav .nav-button:disabled{
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: calc(100vh - 195px);
-    width: 100%;
+    max-height: 60vh;
+    width: 90%;
     overflow-y: scroll;
     padding: 10px 20px;
     position: relative;
@@ -744,7 +762,7 @@ nav .nav-button:disabled{
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: calc(100vh - 178px);
+    max-height: 60vh;
     width: 100%;
     overflow-y: scroll;
     padding: 10px 20px;
@@ -784,9 +802,10 @@ nav .nav-button:disabled{
 /*chat feed column*/
 .ce-chat-feed-column{
     flex: 0 0 65% !important;
-    max-width: 65% !important;
+    max-width: 100% !important;
+    width: 65% !important;
     padding:0px 10px !important;
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 .ce-message-timestamp.ce-my-message-timestamp{
@@ -827,8 +846,12 @@ nav .nav-button:disabled{
 .chat-header .chat-avatar{
     margin:0px 30px;
 }
+.chat-header .title-container{
+    flex-grow: 1;
+}
 .chat-header .chat-title{
-    margin: 0 20px;
+    margin: auto;
+    text-align: center;
 }
 .chat-header .chat-info{
     margin: 0 20px;
@@ -1003,9 +1026,7 @@ nav .nav-button:disabled{
     margin: 8px 10px 30px 0px;
     min-width: 25%;    
 }
-/* .list-container .form-select{
-    width: 100%;
-} */
+
 .list-places{
     height: 75vh;
     overflow: auto;
@@ -1047,4 +1068,127 @@ nav .nav-button:disabled{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+
+@media (min-width: 1024px){
+    .hide-on-pc {
+        display: none;
+    }
+}
+@media (max-width: 1023px){
+    .sidebar-container{
+        position: fixed;
+        max-width: 100%;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: all ease .3s;
+    }
+    .sidebar-container.show{
+        transform: translateX(0);
+    }
+    .close-sidebar{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top: 1px solid #ccc;
+    }
+    .onboarding form section{
+        width: 100%;
+    }
+    .onboarding form .options{
+        width: 100%;
+     }
+    .onboarding.update-info{
+        padding: 0;
+        width: 100%;
+    }
+ 
+    .onboarding.update-info form section {
+        width: 100%;
+    }
+    
+    .onboarding.update-info form .options{
+        width: 100%;
+     }
+    .user-info{
+      width: 100%;
+      animation: slide-in-mobile .3s ease-in forwards;
+    }
+    @keyframes slide-in-mobile {
+        from{
+            transform: translateX(100%);
+        }
+        to{
+            transform: translateX(0%);
+        }
+    }
+    .swipe-container{
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+    }
+    .mobile-toolbar{
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    .show-groups,
+    .show-chat{
+        transform: translateX(0);
+        width: 100%;
+    }
+    .ce-chat-engine{
+        width: 100%;
+    }
+    .ce-wrapper{
+        width: 100%;
+    }
+    .ce-chat-feed-column{
+        flex: 0 0 100% !important;
+        width: 100% !important;
+    }
+    .ce-settings-column{
+        display: none;
+    }
+    .chat-avatar{
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .chat-info{
+        text-align: center;
+        width: 100%;
+    }
+}
+@media (min-width: 740px) and (max-width: 1023px) {
+    .hide-on-tablet {
+        display: none;
+    }
+    
+    .card-container,
+    .card{
+        height: 550px !important;
+    }
+   
+}
+
+@media (max-width:739px){
+    .hide-on-mobile{
+        display: none;
+    }
+   
+    .card-container,
+    .card{
+        height: 550px !important;
+        width: 100%;
+        border-radius: 5px;
+    }
+   
 }

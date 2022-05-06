@@ -19,7 +19,7 @@ const MatchesDisplay = () => {
 
     const { chats,setActiveChat } = useContext(ChatEngineContext)
     const {showChat, setShowChat, setShowGroupChat, setIsFirstRender} = useContext(ChatContext)
-    const {matchedUserIds, setClickedUser} = useContext(UserContext)
+    const {matchedUserIds, setClickedUser,clickedUser} = useContext(UserContext)
   
 
     const getMatches = ()=>{
@@ -44,19 +44,18 @@ const MatchesDisplay = () => {
     
     const handleClick = (match)=>{
       setIsFirstRender(true)
+      getChat(match)
       if(!showChat){
         setShowChat(true);
       }
       setShowGroupChat(false)
       setClickedUser(match)
-      getChat(match)
     }
  
     const checkUnReadMessage = ()=>{
         getAllChats(userName,userSecret)
         .then((userchats)=>{
         const chats = userchats.data
-        
         const unReadChats = chats.filter((chat)=>{
             const userLastRead = chat.people?.find((person)=>{
                return person.person.username === userName
@@ -84,18 +83,17 @@ const MatchesDisplay = () => {
         return checkUnRead.includes(matchedUserName)
     }
     const getChat = (match)=>{
-     
           if(chats){
           const userchats = Object.values(chats)
-          const existChat = userchats.filter((chat)=>{
+          const existChat = userchats.find((chat)=>{
             const people = chat.people
             const found = people.find((person)=>{
                 return person.person.username === match.username
             })
               return found && chat.is_direct_chat===true 
          })
-        if(existChat[0]){
-          setActiveChat(existChat[0].id)
+        if(existChat){
+          setActiveChat(existChat.id)
         }
         else{
           let formdata = new FormData()
@@ -118,9 +116,12 @@ const MatchesDisplay = () => {
 
     useEffect(()=>{
       checkUnReadMessage()
+      if(clickedUser){
+        getChat(clickedUser)
+      }
     },[chats])
     
-   
+
     return (
         <div className="matches-display">
           {

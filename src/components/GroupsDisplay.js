@@ -12,9 +12,8 @@ const GroupsDisplay = () => {
     const userSecret = cookies.UserSecret
     const [groups, setGroups] = useState([])
     const [groupName, setGroupName] = useState("")
-    const { setActiveChat } = useContext(ChatEngineContext)
-    const { setShowChat, setShowGroupChat} = useContext(ChatContext)
-
+    const { chats, setActiveChat } = useContext(ChatEngineContext)
+    const { setShowGroupChat,setGroupChatId,groupChatId} = useContext(ChatContext)
 
     const getGroups = ()=>{
     
@@ -42,12 +41,20 @@ const GroupsDisplay = () => {
         })
       }
       const handleClick = (id)=>{
-          setShowGroupChat(true)
+          setGroupChatId(id)
           setActiveChat(id)
+          setShowGroupChat(true)
       }
       useEffect(()=>{
         getGroups()
       },[])
+
+      useEffect(()=>{
+        if(groupChatId){
+            setActiveChat(groupChatId)
+        }
+      },[chats])
+
     return (
         <div className="groups-display">
         <div className="create-group-container">

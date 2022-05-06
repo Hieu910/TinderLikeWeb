@@ -254,7 +254,7 @@ const Onboarding = () => {
                 checked={customJson?.gender_identity === "man"}
                 value="man"
               />
-              <label htmlFor="man">Man</label>
+              <label htmlFor="man">Male</label>
               <input
                 id="woman"
                 type="radio"
@@ -263,7 +263,7 @@ const Onboarding = () => {
                 checked={customJson?.gender_identity === "woman"}
                 value="woman"
               />
-              <label htmlFor="woman">Woman</label>
+              <label htmlFor="woman">Female</label>
               
             </div>
 
@@ -276,7 +276,7 @@ const Onboarding = () => {
               onChange={handleChange}
             />
 
-            <label>Show Me</label>
+            <label>Interested in</label>
             <div className="row-input-container">
               <input
                 id="man-interest"

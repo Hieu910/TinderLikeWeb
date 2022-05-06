@@ -1,7 +1,8 @@
 import { UserContext } from "../context/UserContext"
+import { HeaderContext } from "../context/HeaderContext"
 import { useContext, useEffect, useState } from "react";
 import { useCookies, Cookies } from "react-cookie";
-
+import {IoReturnDownBackOutline}  from "react-icons/io5"
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import passions from "../data/passions";
@@ -17,7 +18,7 @@ const Userinfo = () => {
   const [customJson, setCustomJson] = useState("");
 
   const {user, userData,setUser,setUserData} = useContext(UserContext)
-
+  const {setShowInfo} = useContext(HeaderContext)
 
   useEffect(()=>{
       setCustomJson(userData)
@@ -106,6 +107,9 @@ const Userinfo = () => {
   };
   return (
       <div className="onboarding update-info">
+      <div className="close-setting" onClick={()=>{setShowInfo(false)}}>
+        <IoReturnDownBackOutline />
+      </div>
         <h2>Update account info</h2>
         <form onSubmit={handleSubmit}>
           <section>
@@ -177,7 +181,7 @@ const Userinfo = () => {
                 checked={customJson.gender_identity === "man"}
                 value="man"
               />
-              <label htmlFor="man">Man</label>
+              <label htmlFor="man">Male</label>
               <input
                 id="woman"
                 type="radio"
@@ -186,7 +190,7 @@ const Userinfo = () => {
                 checked={customJson.gender_identity === "woman"}
                 value="woman"
               />
-              <label htmlFor="woman">Woman</label>
+              <label htmlFor="woman">Female</label>
               
             </div>
 
@@ -199,7 +203,7 @@ const Userinfo = () => {
               onChange={handleChange}
             />
 
-            <label>Show Me</label>
+            <label>Interested in</label>
             <div className="row-input-container">
               <input
                 id="man-interest"

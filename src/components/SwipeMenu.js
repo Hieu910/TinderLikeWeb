@@ -75,7 +75,7 @@ const SwipeMenu = ({filteredMatchedGenderedUsers,distance})=>{
     return (
       
         <div className="swipe-container">
-          <div className="swipe-dir"> 
+          <div className="swipe-dir hide-on-mobile"> 
                     <IoIosClose className="not-match-icon"/>
                     <span>NOPE</span>
                 </div>
@@ -136,9 +136,9 @@ const SwipeMenu = ({filteredMatchedGenderedUsers,distance})=>{
          }
        
          </div>
-         <div className="swipe-dir"> 
+         <div className="swipe-dir hide-on-mobile"> 
                         <IoMdHeart className="match-icon"/>
-                        <span>MATCH</span>
+                        <span>LIKE</span>
                 </div>
         </div>
         

@@ -12,9 +12,16 @@ import ChatSettings from "../components/ChatSettings";
 import Userinfo from "../components/UserInfo";
 import { getAllUsers, getUserById } from '../api/chatengineAPI';
 import { ChatEngineContext } from "react-chat-engine"
+
+import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Container from '@material-ui/core/Container';
+import Tooltip from '@material-ui/core/Tooltip';
+import whiteLogo from "../images/white-logo.png"
+
 const Dashboard = () => {
-  const { chats, activeChat ,setActiveChat } = useContext(ChatEngineContext)
-  console.log(activeChat)
   
     const { user,userData,setUserData,
           setUser,matchedUserIds,
@@ -23,15 +30,13 @@ const Dashboard = () => {
           setNotMatchedUserIds
         } = useContext(UserContext)
     const { searchFilter, showInfo } = useContext(HeaderContext)
-    const {showChat,showGroupChat,isFirstRender} = useContext(ChatContext)
+    const {showChat,showGroupChat,setShowSideMenu,isFirstRender} = useContext(ChatContext)
     
     const [genderedUsers, setGenderedUsers] = useState([])
     const [cookies, setCookie, removeCookie] = useCookies("user")
     const userId  = Number(cookies.UserId)
- 
     const navigate = useNavigate()
   
-    
     const getUser = ()=>{
         try{
           getUserById(userId)
@@ -86,6 +91,7 @@ const Dashboard = () => {
 
     },[user,userData])
 
+   
    
       //khoang cach 2 diem tren ban do
       const distance = (lat1, lon1, lat2, lon2)=>{
@@ -146,17 +152,37 @@ const Dashboard = () => {
             filteredMatchedGenderedUsers={filteredMatchedGenderedUsers} 
             distance={distance}
           />}
-        
+        <div className="mobile-toolbar hide-on-pc">
+        <AppBar color="secondary" position="static">
+            <Container maxWidth="xl">
+              <Toolbar disableGutters>
+                <Box onClick={()=>{setShowSideMenu(true)}}
+                      sx={{ flexGrow: 0 }}
+                >
+                  <Tooltip title="Open settings">
+                    <IconButton  sx={{ p: 0 }}>
+                      <div className="profile">
+                          <div className="avatar-container skeleton"style={{ backgroundImage: "url(" + user.avatar + ")", backgroundSize:"cover",backgroundPosition:"center" }}>
+                          </div>
+                      </div>
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Box sx={{ width: '100%' }}>
+                <img alt="logo" className="small-logo" src={whiteLogo} />
+                </Box>
+              </Toolbar>
+            </Container>
+          </AppBar>
+        </div>
         { showInfo &&
           <div className="user-info" style={{ fontFamily: "Readex Pro"}}>
               <Userinfo />
           </div>
         }
         {isFirstRender && 
-
         <div className={showChat ? "chatengine show-chat":"chatengine"} style={{ fontFamily: "Readex Pro"}}>
-        <ChatEngine                
-                              
+        <ChatEngine                        
                   offset={+7}
                   height="100vh"
                   projectID="9634dd60-e53b-4d63-a793-711552089ad4"
@@ -173,8 +199,6 @@ const Dashboard = () => {
               />
        </div>
         }
-        
-        
 
        { showGroupChat ?
        <div className={showGroupChat ? "chatengine show-groups":"chatengine"} style={{ fontFamily: "Readex Pro"}}>
