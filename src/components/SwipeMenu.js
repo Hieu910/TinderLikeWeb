@@ -80,7 +80,7 @@ const SwipeMenu = ({filteredMatchedGenderedUsers,distance})=>{
                     <span>NOPE</span>
                 </div>
         <div className="card-container">
-          {filteredMatchedGenderedUsers.length ? 
+          {filteredMatchedGenderedUsers?.length ? 
           filteredMatchedGenderedUsers?.map((genderedUser) =>{
             const genderedUserInfo = JSON.parse(genderedUser.custom_json)
             const location = genderedUserInfo.location

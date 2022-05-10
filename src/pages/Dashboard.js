@@ -11,7 +11,7 @@ import ChatHeader from "../components/ChatHeader";
 import ChatSettings from "../components/ChatSettings";
 import Userinfo from "../components/UserInfo";
 import { getAllUsers, getUserById } from '../api/chatengineAPI';
-import { ChatEngineContext } from "react-chat-engine"
+
 
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
@@ -68,7 +68,7 @@ const Dashboard = () => {
             })
             setGenderedUsers(interestUsers)
           } else{
-            const interestUsers = users.data.filter((foundUser)=>{
+            const interestUsers = users?.data.filter((foundUser)=>{
               return ((JSON.parse(foundUser.custom_json).gender_identity===userData.gender_interest) && (foundUser.id !== userId));
             })
             setGenderedUsers(interestUsers)
@@ -91,8 +91,6 @@ const Dashboard = () => {
 
     },[user,userData])
 
-   
-   
       //khoang cach 2 diem tren ban do
       const distance = (lat1, lon1, lat2, lon2)=>{
         var p = 0.017453292519943295;
@@ -185,7 +183,7 @@ const Dashboard = () => {
         <ChatEngine                        
                   offset={+7}
                   height="100vh"
-                  projectID="9634dd60-e53b-4d63-a793-711552089ad4"
+                  projectID={process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID}
                   userName={cookies.UserName}
                   userSecret={cookies.UserSecret}
                   renderNewChatForm={(creds) => {}}
@@ -203,10 +201,9 @@ const Dashboard = () => {
        { showGroupChat ?
        <div className={showGroupChat ? "chatengine show-groups":"chatengine"} style={{ fontFamily: "Readex Pro"}}>
         <ChatEngine 
-              
                   offset={+7}
                   height="100vh"
-                  projectID="9634dd60-e53b-4d63-a793-711552089ad4"
+                  projectID={process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID}
                   userName={cookies.UserName}
                   userSecret={cookies.UserSecret}
                   renderChatHeader={(chat) => chat ? <ChatHeader chat={chat}/> :null}

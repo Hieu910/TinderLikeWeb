@@ -2,17 +2,17 @@
 import axios from 'axios';
 
 export const getUserDetail = async (name,Id) => {
-
+      
         const data = await axios.get('https://api.chatengine.io/users/me/',{
-            headers:{
-                "Project-ID": process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID,
-                "User-Name" : name,
-                "User-Secret": Id,
-            }
-        })
-
+          headers:{
+              "Project-ID": process.env.REACT_APP_CHAT_ENGINE_PROJECT_ID,
+              "User-Name" : name,
+              "User-Secret": Id,
+          }
+      })
+        
         return data
-    
+     
 };
 export const getAllUsers = async (name,Id) => {
     try {
@@ -50,7 +50,7 @@ export const getOrCreateUser = async (formdata) => {
 export const getUserById = async (userId) => {
     try {
       
-      const data =  await axios.get(`https://api.chatengine.io/users/${userId}/`,{
+      const data = await axios.get(`https://api.chatengine.io/users/${userId}/`,{
         headers:{
             "PRIVATE-KEY":process.env.REACT_APP_CHAT_ENGINE_PRIVATE_KEY
         }

@@ -20,9 +20,9 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import {  getUserDetail, getOrCreateUser,createUser,getUserSession } from '../api/chatengineAPI';
 
-const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
-    const [userName,setUserName] = useState(null)
-    const [password,setPassword] = useState(null)
+const AuthModal = ({setShowModal , isSignUp}) => {
+    const [userName,setUserName] = useState("")
+    const [password,setPassword] = useState("")
     const [confirmPassword,setConfirmPassword] =useState(null)
     const [error,setError] = useState(null)
     const [cookies , setCookie, removeCookie ] =useCookies(null)
@@ -71,9 +71,9 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
         const Id = res.graphDomain ? res.id : res.profileObj.googleId
         const email = res.graphDomain ? res.email : res.profileObj.email
         const accessToken = res.accessToken
-
         getUserDetail(name,Id)
         .then(()=>{
+            
             let formdata = new FormData()
             formdata.append("username", name);
             formdata.append("secret", Id);
@@ -88,7 +88,8 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
                 window.location.reload()
             })
         })
-        .catch(()=>{
+        .catch((err)=>{
+         
             let formdata = new FormData()
             formdata.append("username", name);
             formdata.append("secret", Id);
@@ -133,7 +134,7 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
                 return
             }
            getUserDetail(userName,password)
-            .then( ()=>{
+            .then(()=>{
                 if(isSignUp){
                     setLoading(false)
                     setError("User name already registered, please Login!")
@@ -157,13 +158,14 @@ const AuthModal = ({setShowModal, setIsSignUp , isSignUp}) => {
                     })
                 }
             })
-            .catch(()=>{
+            .catch((err)=>{
+              
                 if(isSignUp){
                     let formdata = new FormData()
                     formdata.append("username",userName);
                     formdata.append("secret",password);
                     createUser(formdata)
-                    .then( async(user)=> {
+                    .then((user)=> {
                         getUserSession(userName,password)
                         .then((session)=>{
                             setCookie("AuthToken",session.data.token)

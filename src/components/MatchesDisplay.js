@@ -26,7 +26,7 @@ const MatchesDisplay = () => {
         try{
             getAllUsers()
             .then((users)=>{
-              const matchedUsers = users.data.filter((user)=>{
+              const matchedUsers = users?.data.filter((user)=>{
                 return matchedUserIds.includes(user.id);
             })
               const filteredProfiles = matchedUsers?.filter((matchedProfile)=>{

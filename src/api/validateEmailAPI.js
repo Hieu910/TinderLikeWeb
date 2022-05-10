@@ -15,5 +15,4 @@ import axios from "axios";
     }
   };
 
-  // ?email=${email}&api_key=${process.env.REACT_APP_EMAILABLE_API_KEY}
 export default validateEmail

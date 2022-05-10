@@ -45,9 +45,9 @@ p{
     padding: 12px 30px;
     border-radius: 30px;
     border: none;
+    cursor: pointer;
 }
 .primary-button:hover {
-    cursor: pointer;
     background: linear-gradient(260deg,#fe3072, #ff5948);
 }
 
@@ -59,6 +59,7 @@ p{
     text-transform: uppercase;
     padding: 12px 30px;
     border-radius: 30px;
+    cursor: pointer;
     border: solid 2px rgb(121,119,119);
     margin: 6px
 }
@@ -255,6 +256,7 @@ nav .nav-button:disabled{
     color: rgb(121,119,119);
     font-size: 15px;
     border: none;
+    cursor: pointer;
     text-transform: uppercase ;
 }
 .auth-modal .facebook-login-btn:hover{

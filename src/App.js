@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
-
 import { useCookies } from "react-cookie";
 import { BrowserRouter , Routes , Route } from "react-router-dom"
 
