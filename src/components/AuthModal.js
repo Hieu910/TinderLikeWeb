@@ -59,7 +59,7 @@ const AuthModal = ({setShowModal , isSignUp}) => {
     const onLoginFailure = (res) => {
         if(isClicked){
             setLoading(false)
-            setError("Email already registered, please use another email!")
+            setError("Failed to connect to server")
             return
         }
         setIsClicked(true)

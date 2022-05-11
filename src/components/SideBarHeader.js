@@ -48,7 +48,7 @@ const SideBarHeader = () => {
            {showSearch && <SearchSettings/>}
             <GoogleLogout 
                 className="log-out-icon"
-                clientId="734058757713-h2l0k7cpp493k6e5tvtlnlr2vi77fdql.apps.googleusercontent.com"
+                clientId={process.env.REACT_APP_CLIENT_ID}
                 buttonText={<BiLogOut />}
                 onLogoutSuccess={logout}
                 icon={false}
